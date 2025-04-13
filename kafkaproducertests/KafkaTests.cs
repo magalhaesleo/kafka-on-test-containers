@@ -19,7 +19,7 @@ public sealed class KafkaTests(KafkaFixture kafkaFixture) : IClassFixture<KafkaF
         // Assert
         _producer.Flush();
         var persons = kafkaFixture.GetAllMessages<string, Person>(topic).ToList();
-        Assert.NotEmpty(persons);
+        Assert.Equivalent(Assert.Single(persons), person);
     }
 
     public void Dispose()

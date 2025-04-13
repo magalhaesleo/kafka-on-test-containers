@@ -50,7 +50,7 @@ public class KafkaFixture : IAsyncLifetime
         await _network.DisposeAsync();
     }
     
-    public List<PartitionMetadata> GetTopicPartitions(string topic)
+    private List<PartitionMetadata> GetTopicPartitions(string topic)
     {
         using var adminClient = new AdminClientBuilder(new AdminClientConfig
             { BootstrapServers = KafkaContainer.GetBootstrapAddress() }).Build(); 
@@ -77,19 +77,11 @@ public class KafkaFixture : IAsyncLifetime
 
         while (true)
         {
-            var timeout = TimeSpan.FromSeconds(1);
-            using var cts = new CancellationTokenSource(timeout);
-            TValue value;
-            try
-            {
-                var consumeResult = consumer.Consume(cts.Token);
-                value = consumeResult.Message.Value;
-            }
-            catch (OperationCanceledException)
-            {
-                yield break;
-            }
+            const int msTimeout = 1000;
+            var consumeResult = consumer.Consume(msTimeout);
+            if (consumeResult is null) break;
             
+            var value = consumeResult.Message.Value;
             yield return value;
         }
     }

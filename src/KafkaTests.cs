@@ -8,39 +8,20 @@ using Testcontainers.Kafka;
 
 namespace kafka_test_containers;
 
-public class KafkaTests
+public class KafkaTests(KafkaFixture kafkaFixture) : IClassFixture<KafkaFixture>
 {
     [Fact]
-    public async Task Test1()
+    public async Task Given_message_should_publish_successfully()
     {
         // Arrange
-        await using var kafkaNetwork = new NetworkBuilder().Build();
-        await kafkaNetwork.CreateAsync();
-        await using var kafkaContainer = new KafkaBuilder()
-            .WithNetwork(kafkaNetwork)
-            .WithNetworkAliases("kafka")
-            .Build();
-        await using var schemaRegistryContainer = new ContainerBuilder()
-            .DependsOn(kafkaContainer)
-            .WithImage("confluentinc/cp-schema-registry:7.5.2")
-            .WithNetwork(kafkaNetwork)
-            .WithExposedPort(8081)
-            .WithPortBinding(8081, true)
-            .WithEnvironment("SCHEMA_REGISTRY_HOST_NAME", "schema-registry")
-            .WithEnvironment("SCHEMA_REGISTRY_LISTENERS", "http://0.0.0.0:8081")
-            .WithEnvironment("SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS",
-                $"PLAINTEXT://kafka:{KafkaBuilder.BrokerPort}")
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilMessageIsLogged("Server started, listening for requests..."))
-            .Build();
-        await Task.WhenAll(kafkaContainer.StartAsync(), schemaRegistryContainer.StartAsync());
         var producerConfig = new ProducerConfig
         {
-            BootstrapServers = kafkaContainer.GetBootstrapAddress(),
+            BootstrapServers = kafkaFixture.KafkaContainer.GetBootstrapAddress(),
         };
 
         var schemaRegistryConfig = new SchemaRegistryConfig
         {
-            Url = $"http://{schemaRegistryContainer.Hostname}:{schemaRegistryContainer.GetMappedPublicPort(8081)}"
+            Url = kafkaFixture.GetSchemaRegistryUrl()
         };
 
         using var schemaRegistry = new CachedSchemaRegistryClient(schemaRegistryConfig);

@@ -1,28 +1,25 @@
-using Avro;
-using Avro.Generic;
 using Confluent.Kafka;
 using Confluent.SchemaRegistry;
 using Confluent.SchemaRegistry.Serdes;
-using DotNet.Testcontainers.Builders;
-using Testcontainers.Kafka;
 
 namespace kafka_test_containers;
 
 public sealed class KafkaTests : IClassFixture<KafkaFixture>, IDisposable
 {
     private readonly CachedSchemaRegistryClient _schemaRegistryClient;
-    private readonly IProducer<string, GenericRecord> _producer;
+    private readonly IProducer<string, Person> _producer;
     public KafkaTests(KafkaFixture kafkaFixture)
     {
         _schemaRegistryClient = new CachedSchemaRegistryClient(new SchemaRegistryConfig
         {
             Url = kafkaFixture.GetSchemaRegistryUrl()
         });
-        _producer = new ProducerBuilder<string, GenericRecord>(new ProducerConfig
+        _producer = new ProducerBuilder<string, Person>(new ProducerConfig
             {
                 BootstrapServers = kafkaFixture.KafkaContainer.GetBootstrapAddress(),
+                LingerMs = 0
             })
-            .SetValueSerializer(new AvroSerializer<GenericRecord>(_schemaRegistryClient))
+            .SetValueSerializer(new AvroSerializer<Person>(_schemaRegistryClient))
             .Build();
     }
     
@@ -30,27 +27,12 @@ public sealed class KafkaTests : IClassFixture<KafkaFixture>, IDisposable
     public async Task Given_message_should_publish_successfully()
     {
         // Arrange
-
+        const string topic = "person";
+        var person = new Person("Leonardo", 10, "red");
+        var message = new Message<string, Person> { Value = person };
 
         // Act
-        const string json = """
-            {
-                "type": "record",
-                "name": "User",
-                "fields": [
-                    { "name": "name", "type": "string" },
-                    { "name": "favorite_number",  "type": "long" },
-                    { "name": "favorite_color", "type": "string" }
-                ]
-            }
-            """;
-        var s = (RecordSchema)Avro.Schema.Parse(json);
-        const long favoriteNumber = 10;
-        var record = new GenericRecord(s);
-        record.Add("name", "Leonardo");
-        record.Add("favorite_number", favoriteNumber);
-        record.Add("favorite_color", "red");
-        var produceResult = await _producer.ProduceAsync("topic", new Message<string, GenericRecord> { Value = record });
+        var produceResult = await _producer.ProduceAsync(topic, message);
 
         // Assert
         Assert.Equal(PersistenceStatus.Persisted, produceResult.Status);

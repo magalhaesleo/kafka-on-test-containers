@@ -1,7 +1,7 @@
 using Avro;
 using Avro.Specific;
 
-namespace kafka_test_containers;
+namespace KafkaProducer;
 
 public class Person : ISpecificRecord
 {

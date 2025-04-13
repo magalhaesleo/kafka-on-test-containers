@@ -1,46 +1,29 @@
-using Confluent.Kafka;
-using Confluent.SchemaRegistry;
-using Confluent.SchemaRegistry.Serdes;
+using KafkaProducer;
 
-namespace kafka_test_containers;
+namespace KafkaProducerTests;
 
-public sealed class KafkaTests : IClassFixture<KafkaFixture>, IDisposable
+public sealed class KafkaTests(KafkaFixture kafkaFixture) : IClassFixture<KafkaFixture>, IDisposable
 {
-    private readonly CachedSchemaRegistryClient _schemaRegistryClient;
-    private readonly IProducer<string, Person> _producer;
-    public KafkaTests(KafkaFixture kafkaFixture)
-    {
-        _schemaRegistryClient = new CachedSchemaRegistryClient(new SchemaRegistryConfig
-        {
-            Url = kafkaFixture.GetSchemaRegistryUrl()
-        });
-        _producer = new ProducerBuilder<string, Person>(new ProducerConfig
-            {
-                BootstrapServers = kafkaFixture.KafkaContainer.GetBootstrapAddress(),
-                LingerMs = 0
-            })
-            .SetValueSerializer(new AvroSerializer<Person>(_schemaRegistryClient))
-            .Build();
-    }
-    
+    private readonly Producer _producer = new(kafkaFixture.KafkaContainer.GetBootstrapAddress(), kafkaFixture.GetSchemaRegistryUrl());
+
     [Fact]
-    public async Task Given_message_should_publish_successfully()
+    public void Given_message_should_publish_successfully()
     {
         // Arrange
-        const string topic = "person";
+        const string topic = "persons";
         var person = new Person("Leonardo", 10, "red");
-        var message = new Message<string, Person> { Value = person };
 
         // Act
-        var produceResult = await _producer.ProduceAsync(topic, message);
+        _producer.Produce(person);
 
         // Assert
-        Assert.Equal(PersistenceStatus.Persisted, produceResult.Status);
+        _producer.Flush();
+        var persons = kafkaFixture.GetAllMessages<string, Person>(topic).ToList();
+        Assert.NotEmpty(persons);
     }
 
     public void Dispose()
     {
         _producer.Dispose();
-        _schemaRegistryClient.Dispose();
     }
 }

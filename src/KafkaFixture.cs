@@ -3,7 +3,7 @@ using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Networks;
 using Testcontainers.Kafka;
 
-namespace kafka_test_containers;
+namespace KafkaProducerTests;
 
 public class KafkaFixture : IAsyncLifetime
 {

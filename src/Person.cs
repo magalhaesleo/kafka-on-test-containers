@@ -5,17 +5,18 @@ namespace kafka_test_containers;
 
 public class Person : ISpecificRecord
 {
-    public static Schema _SCHEMA = Schema.Parse("""
-                                                     {
-                                                         "type": "record",
-                                                         "name": "User",
-                                                         "fields": [
-                                                             { "name": "name", "type": "string" },
-                                                             { "name": "favorite_number",  "type": "long" },
-                                                             { "name": "favorite_color", "type": "string" }
-                                                         ]
-                                                     }
-                                                     """);
+    public static Schema _SCHEMA = Schema.Parse(
+        """
+        {
+            "type": "record",
+            "name": "User",
+            "fields": [
+                { "name": "name", "type": "string" },
+                { "name": "favorite_number", "type": "long" },
+                { "name": "favorite_color", "type": "string" }
+            ]
+        }
+        """);
 
     public Schema Schema => _SCHEMA;
 

@@ -8,7 +8,7 @@ namespace kafka_test_containers;
 public class KafkaFixture : IAsyncLifetime
 {
     private readonly INetwork _network;
-    public const int SchemaRegistryPort = 8081;
+    public const ushort SchemaRegistryPort = 8081;
     public KafkaContainer KafkaContainer { get; }
     public IContainer SchemaRegistry { get; }
     public KafkaFixture()

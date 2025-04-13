@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaProducer", "kafkaproducer\KafkaProducer.csproj", "{6172BA43-D901-496B-B6AA-52A912A5FB19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaProducer", "producer\KafkaProducer.csproj", "{3ABAEFC3-559B-4973-BA4B-3FE4A532D3F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaProducerTests", "kafkaproducertests\KafkaProducerTests.csproj", "{3F8AECFB-F7B0-4D6C-9A50-3BFE1624C11E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaProducerTests", "tests\KafkaProducerTests.csproj", "{B97434AE-F919-4E5F-9C6E-B96C31BB13F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,13 +10,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6172BA43-D901-496B-B6AA-52A912A5FB19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6172BA43-D901-496B-B6AA-52A912A5FB19}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6172BA43-D901-496B-B6AA-52A912A5FB19}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6172BA43-D901-496B-B6AA-52A912A5FB19}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3F8AECFB-F7B0-4D6C-9A50-3BFE1624C11E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F8AECFB-F7B0-4D6C-9A50-3BFE1624C11E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3F8AECFB-F7B0-4D6C-9A50-3BFE1624C11E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3F8AECFB-F7B0-4D6C-9A50-3BFE1624C11E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ABAEFC3-559B-4973-BA4B-3FE4A532D3F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ABAEFC3-559B-4973-BA4B-3FE4A532D3F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ABAEFC3-559B-4973-BA4B-3FE4A532D3F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ABAEFC3-559B-4973-BA4B-3FE4A532D3F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B97434AE-F919-4E5F-9C6E-B96C31BB13F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B97434AE-F919-4E5F-9C6E-B96C31BB13F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B97434AE-F919-4E5F-9C6E-B96C31BB13F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B97434AE-F919-4E5F-9C6E-B96C31BB13F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -26,7 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\kafkaproducer\KafkaProducer.csproj" />
+      <ProjectReference Include="..\producer\KafkaProducer.csproj" />
     </ItemGroup>
 
 </Project>

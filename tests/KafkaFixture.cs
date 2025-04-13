@@ -85,7 +85,7 @@ public class KafkaFixture : IAsyncLifetime
                 var consumeResult = consumer.Consume(cts.Token);
                 value = consumeResult.Message.Value;
             }
-            catch (OperationCanceledException e)
+            catch (OperationCanceledException)
             {
                 yield break;
             }
